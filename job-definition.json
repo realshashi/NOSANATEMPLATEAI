@@ -1,0 +1,77 @@
+{
+  "version": "1.0.0",
+  "name": "stable-diffusion-lite-inference",
+  "description": "Generate images from text using Stable Diffusion v1.5",
+  "nodes": [
+    {
+      "id": "sd-inference",
+      "name": "Stable Diffusion Lite Inference",
+      "image": "ghcr.io/hafriedlander/stable-diffusion-grpcserver:latest",
+      "resources": {
+        "gpu": 1,
+        "cpu": 2,
+        "memory": "8Gi"
+      },
+      "env": [
+        {
+          "name": "MODEL_ID",
+          "value": "runwayml/stable-diffusion-v1-5"
+        },
+        {
+          "name": "PROMPT",
+          "value": "${PROMPT:-a beautiful sunset over mountains, photorealistic, 4k}"
+        },
+        {
+          "name": "NEGATIVE_PROMPT",
+          "value": "${NEGATIVE_PROMPT:-blurry, bad quality, disfigured}"
+        },
+        {
+          "name": "WIDTH",
+          "value": "${WIDTH:-512}"
+        },
+        {
+          "name": "HEIGHT",
+          "value": "${HEIGHT:-512}"
+        },
+        {
+          "name": "NUM_INFERENCE_STEPS",
+          "value": "${NUM_INFERENCE_STEPS:-30}"
+        },
+        {
+          "name": "GUIDANCE_SCALE",
+          "value": "${GUIDANCE_SCALE:-7.5}"
+        },
+        {
+          "name": "OUTPUT_DIR",
+          "value": "/outputs"
+        }
+      ],
+      "command": [
+        "python",
+        "-c",
+        "from diffusers import StableDiffusionPipeline; import torch; import os; import base64; import io; from PIL import Image; model_id = os.environ.get('MODEL_ID', 'runwayml/stable-diffusion-v1-5'); pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16); pipe = pipe.to('cuda'); prompt = os.environ.get('PROMPT', 'a beautiful sunset over mountains, photorealistic, 4k'); negative_prompt = os.environ.get('NEGATIVE_PROMPT', 'blurry, bad quality, disfigured'); width = int(os.environ.get('WIDTH', 512)); height = int(os.environ.get('HEIGHT', 512)); num_inference_steps = int(os.environ.get('NUM_INFERENCE_STEPS', 30)); guidance_scale = float(os.environ.get('GUIDANCE_SCALE', 7.5)); image = pipe(prompt=prompt, negative_prompt=negative_prompt, width=width, height=height, num_inference_steps=num_inference_steps, guidance_scale=guidance_scale).images[0]; output_dir = os.environ.get('OUTPUT_DIR', '/outputs'); os.makedirs(output_dir, exist_ok=True); image_path = os.path.join(output_dir, 'generated_image.png'); image.save(image_path); print(f'Image generated and saved at {image_path}'); buf = io.BytesIO(); image.save(buf, format='PNG'); b64_str = base64.b64encode(buf.getvalue()).decode('utf-8'); with open(os.path.join(output_dir, 'image_b64.txt'), 'w') as f: f.write(b64_str); print('Generation complete!')"
+      ],
+      "mounts": [
+        {
+          "name": "outputs",
+          "mountPath": "/outputs",
+          "persistentVolumeClaim": {
+            "claimName": "nosana-job-pvc"
+          }
+        }
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "name": "generated-image",
+      "path": "/outputs/generated_image.png",
+      "nodeId": "sd-inference"
+    },
+    {
+      "name": "image-base64",
+      "path": "/outputs/image_b64.txt",
+      "nodeId": "sd-inference"
+    }
+  ]
+}

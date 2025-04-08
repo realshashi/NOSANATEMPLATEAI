@@ -1,0 +1,56 @@
+modules = ["python-3.11"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Nosana Template Viewer"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "nosana-template-validation"
+
+[[workflows.workflow]]
+name = "Nosana Template Viewer"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python -m http.server 5000"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "nosana-template-validation"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cat job-definition.json | jq"
+
+[deployment]
+run = ["sh", "-c", "python -m http.server 5000"]
+
+[[ports]]
+localPort = 5000
+externalPort = 80

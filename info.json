@@ -1,0 +1,7 @@
+{
+  "name": "Stable Diffusion Lite",
+  "description": "Run text-to-image inference using Stable Diffusion Lite on Nosana. Generate high-quality images from text prompts with customizable parameters.",
+  "tags": ["ai", "image", "inference", "stable-diffusion", "text-to-image"],
+  "author": "Nosana Builder",
+  "version": "1.0.0"
+}

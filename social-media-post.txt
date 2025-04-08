@@ -1,0 +1,9 @@
+🚀 Just created a Stable Diffusion Lite template for @nosana_ai's network! Generate stunning AI images with customizable prompts, dimensions, and other parameters - all running on decentralized compute.
+
+This template makes it easy to run inference with SD v1.5 without any infrastructure setup. Just customize your prompt and let Nosana's GPU nodes do the heavy lifting!
+
+Perfect for AI enthusiasts, designers, and developers who need text-to-image generation without the hassle.
+
+Try it now: https://github.com/nosana-ci/nosana-templates/pull/XX
+
+#AI #MachineLearning #Nosana #StableDiffusion #Web3Computing #BuildersChallenge
