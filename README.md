@@ -1,7 +1,5 @@
 # Stable Diffusion Lite on Nosana
 
-![Stable Diffusion Banner](https://huggingface.co/spaces/stabilityai/stable-diffusion/resolve/main/images/banner.png)
-
 ## Overview
 
 This template enables you to run Stable Diffusion text-to-image inference on the Nosana Network. Stable Diffusion is a latent text-to-image diffusion model capable of generating photo-realistic images given a text prompt. This implementation uses a lightweight version optimized for GPU efficiency.
@@ -70,11 +68,6 @@ The job produces the following outputs:
 | generated-image | /outputs/generated_image.png | The generated image in PNG format |
 | image-base64 | /outputs/image_b64.txt | Base64 encoded representation of the image |
 
-## Example Results
-
-Here's an example of an image generated with the prompt "a futuristic city with flying cars, 4k, highly detailed":
-
-![Example Generated Image](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/diffusers/stable_diffusion_101/stable_diffusion_city.png)
 
 ## Proof of Execution
 
